@@ -15,6 +15,12 @@ import java.util.Scanner;
  * @author Artie
  */
 public class Utilidades {
+  /*
+  La funcion a continuacion, se utiliza para un menu recursivo, de manera corta,
+  pide un numero hasta que el numero coincida con el rango señalado, como parametros
+  recibe una cadena n, que es la cadena del menu, y un entero m, que es una constante
+  e indica los rangos del menu del 1 al m
+  */
     static int rMenu(String n,int m){
         int op;
         do{
@@ -24,51 +30,14 @@ public class Utilidades {
         }while(op<0 && op>m);
         return op;
     }
-    
+    /*
+    Esta funcion es una forma general de pedir un entero y devolverlo, especialmente
+    util cuando se necesita pedir muchas veces numeros enteros
+    */
     static int giveAInt(){
         System.out.println("Dame el dato:");
         Scanner read = new Scanner(System.in);
         int i = read.nextInt();
         return i;
     }
-    
-    static String giveAString(){
-        System.out.println("Dame el dato:");
-        Scanner read = new Scanner(System.in);
-        String s = read.nextLine();
-        return s;
-    }
-    
-    static boolean isSort(String nF){
-        double elemento , validar=0;
-        File f = new File(nF); 
-        try(Scanner read = new Scanner(f).useDelimiter(",")){
-            while(read.hasNext()){
-                if(read.hasNextDouble()){
-                    elemento = read.nextDouble();
-                    if(validar<elemento)
-                        validar=elemento;
-                    else if(validar>elemento)
-                        return false;
-                }
-            }
-        }
-        catch (FileNotFoundException e){
-          System.out.println(e.toString());
-        } 
-        catch (Exception e){
-          System.out.println(e.toString());
-        }
-        return true;
-   }
-    
-    static void printArray(ArrayList arr){
-            int n = arr.size();
-            for (int i=0; i < n; ++i)
-                System.out.print(arr.get(i)+" ");
-            System.out.println();
-        }
-    
-    
-    }
-
+}
