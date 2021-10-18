@@ -30,6 +30,7 @@ public class Practica4So {
             gestionMemoria memoria = new gestionMemoria();
             memoria.memoriaVacia();
             memoria.buscarSegmentoVacio();
+            memoria.imprimirListaMemoria();
         }while(opcion!=8);
 
     }

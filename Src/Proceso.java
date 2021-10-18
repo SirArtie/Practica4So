@@ -1,5 +1,6 @@
 /*
 Autor: Axel Arturo Bautista
+Autor: Tere
 Fecha: 15/10/2021
 
 */

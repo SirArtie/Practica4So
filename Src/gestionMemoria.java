@@ -23,13 +23,41 @@ public class gestionMemoria {
     System.out.println(memoriaPrincipal.get(0).limite);
   }
 
-  void buscarSegmentoVacio(){
+  void buscarSegmentoVacio(Proceso p){
+    Proceso prueba = new Proceso("Proceso prueba",30,64,100);
     System.out.println("Si funciono, no me mates por favor");
     for( int i = 0; i<memoriaPrincipal.size(); i++){
-      if(memoriaPrincipal.get(i).P.nombre == "Vacio"){
+      int espacio=memoriaPrincipal.get(i).limite - memoriaPrincipal.get(i).base;
+      if(memoriaPrincipal.get(i).P.nombre == "Vacio" && prueba.r_localidad<=espacio){
         System.out.println("Te encontre");
+        insertarSegmento(prueba,i);
+        break;
       }
     }
   }
 
+  void insertarSegmento(Proceso aInsertar, int n){
+    //Necesario numero de lista
+    if (memoriaPrincipal.get(n).limite - memoriaPrincipal.get(n).base == aInsertar.r_localidad){
+      memoriaPrincipal.get(n).P = aInsertar;
+    } else{
+      Segmento S = new Segmento();
+      S.P = aInsertar;
+      S.base = memoriaPrincipal.get(n).base;
+      S.limite = S.base + aInsertar.r_localidad;
+      memoriaPrincipal.get(n).base = S.limite;
+      if (n == 0)
+        memoriaPrincipal.add(n,S);
+      else
+        memoriaPrincipal.add(n-1,S);
+    }
+  }
+  void imprimirListaMemoria(){
+    for( int i = 0 ; i<memoriaPrincipal.size(); i++){
+      System.out.println("Segmento numero: " + (i+1) );
+      System.out.println("Nombre del proceso: " + memoriaPrincipal.get(i).P.nombre);
+      System.out.println("Base: " +memoriaPrincipal.get(i).base);
+      System.out.println("Limite: " +memoriaPrincipal.get(i).limite);
+    }
+  }
 }
