@@ -9,12 +9,20 @@ Fecha: 15/10/2021
 
 //Advertencia: Esta clase es de prueba, aun hay elementos a desarrollar
 
-public class objetoProceso{
+public class Proceso{
 
-  String nombre;
-  int instrucciones;
-  int r_localidad;
-  int idP;
+  String nombre = null;
+  int instruccionesTotales = 0;
+  int instruccionesEjecutadas = 0;//Agregué atributo
+  int r_localidad = 0;
+  int idP = 0;
+
+  public Proceso(String nombre, int numInstrucciones, int numLocalidades, int idProceso){
+    this.nombre = nombre;
+    this.instruccionesTotales = numInstrucciones;
+    this.r_localidad = numLocalidades;
+    this.idP = idProceso;
+  }
 
   //public void crearProceso(String nombreP){
     //NECESARIA UNA FUNCION QUE VERIFIQUE LA MEMORIA

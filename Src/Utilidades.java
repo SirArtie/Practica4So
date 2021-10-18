@@ -40,4 +40,11 @@ public class Utilidades {
         int i = read.nextInt();
         return i;
     }
+
+    static String giveAString(String mensaje){
+      System.out.println(mensaje);
+      Scanner read = new Scanner(System.in);
+      String s = read.nextLine();
+      return s;
+    }
 }
