@@ -19,6 +19,7 @@ public class manejoProcesos {
     id ++;
     int instrucciones, localidades = 0, seleccionar = 0;
     boolean hayEspacio;
+    boolean espacioSuficiente;
     instrucciones = (int)Math.floor(Math.random()*(30-10+1)+10);
     seleccionar = (int)Math.floor(Math.random()*4+1);
     //Con el número que se genere se asignará el número de localidades
@@ -36,23 +37,20 @@ public class manejoProcesos {
             localidades = 512;
             break;
     }
-
-    hayEspacio = this.revisarEspacioMemoria();
-
-    if(hayEspacio == true){
+    if(m.buscarEspacio() == true){
         Proceso nuevoProceso = new Proceso(nombreP, instrucciones, localidades, id);
 
         System.out.println("\n----------------------------------------------------------------\n");
-        System.out.println("*** Proceso creado ***\n");
+        System.out.println("*** Creando Proceso ***\n");//Nota Axel: Cambie esto a creando proceso para que tenga mas coherencia
         System.out.println("Nombre del proceso: " + nombreP);
         System.out.println("Número de instrucciones: " + instrucciones);
         System.out.println("Número de localidades: " + localidades);
         System.out.println("Id de proceso: " + id);
         System.out.println("\n----------------------------------------------------------------\n");
+        /*Se termina de verificar que el espacio en memoria sea suficiente para poder crearlo*/
+        if (m.buscarSegmentoVacio(nuevoProceso))
+          this.mandarAColaPreparados(nuevoProceso);
 
-        this.mandarAColaPreparados(nuevoProceso);
-        //Aqui es donde se usa la funcion para buscar y posteriormente insertar el proceso en un segmento
-        m.buscarSegmentoVacio(nuevoProceso);
     }else{
         System.out.println("Error: No se puede crear proceso porque no hay espacio en memoria\n");
     }

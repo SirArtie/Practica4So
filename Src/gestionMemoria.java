@@ -29,7 +29,8 @@ public class gestionMemoria {
   /*Para insertar necesitamos buscar espacio en la lista de memoria, por lo cual primero
   debemos localizar un espacio en donde colocar el proceso y posteriormente insertarlo,
   aunque esta funcion en concreto solo se encarga de la parte de la localizacion*/
-  void buscarSegmentoVacio(Proceso p){
+  /*Agregado valor bool, para poder verificar si un proceso debe terminar de ser creado o no*/
+  boolean buscarSegmentoVacio(Proceso p){
     int espacio;
     for( int i = 0; i<memoriaPrincipal.size(); i++){
 
@@ -39,9 +40,11 @@ public class gestionMemoria {
       if(memoriaPrincipal.get(i).P.nombre == "Vacio" && p.r_localidad<=espacio){
         //Una vez encontrado un segmento, podemos insertar
         insertarSegmento(p,i);
-        break;
-      } //Falta desarrollar otros casos
+        return true;
+      }
     }
+    System.out.println("No hay espacio suficiente para el proceso, se debe ejecutar o eliminar un proceso");
+    return false;
   }
 
   /*Insertar es un poco laborioso, al manejar como tal una lista, se debe asegurar
@@ -79,4 +82,19 @@ public class gestionMemoria {
       System.out.println("Limite: " +memoriaPrincipal.get(i).limite);
     }
   }
+  /*Esta funcion solo se asegura de que haya espacio en memoria, no le interesa cuanto, esto
+  es solo para verificar si se podria crear un proceso o no, sin embargo tambien se toma en cuenta
+  el caso para cuando el espacio disponible es menor a 64 localidades, en ese caso directamente
+  dice que no hay memoria*/
+  boolean buscarEspacio(){
+    int minimo;
+    for( int i = 0; i<memoriaPrincipal.size(); i++){
+      minimo = memoriaPrincipal.get(i).limite - memoriaPrincipal.get(i).base;
+      if(memoriaPrincipal.get(i).P.nombre == "Vacio" && minimo>=64)
+        return true;
+      }
+  return false;
+  }
+
+  
 }
