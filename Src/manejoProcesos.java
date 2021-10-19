@@ -1,7 +1,8 @@
 
 /**
- *
+ * @autor Tere
  * @author Artie
+ *
  */
 
 import java.util.ArrayList;
@@ -9,7 +10,12 @@ public class manejoProcesos {
   int id = 0;
   ArrayList<Proceso> Preparados = new ArrayList();
 
-  public void crearProceso(String nombreP){
+  /*Nota de Axel: Esta parte, la cambie porque creo que era conveniente
+  usar la misma funcion de la gestion de procesos para poder llevar una cuenta de
+  un id para cada proceso, y el parametro de gestion de memoria, porque es
+  mucho mas sencillo pasar el objeto de gestion de memoria para añadir
+  a los elementos a la lista de memoria*/
+  public void crearProceso(String nombreP, gestionMemoria m){
     id ++;
     int instrucciones, localidades = 0, seleccionar = 0;
     boolean hayEspacio;
@@ -45,10 +51,11 @@ public class manejoProcesos {
         System.out.println("\n----------------------------------------------------------------\n");
 
         this.mandarAColaPreparados(nuevoProceso);
+        //Aqui es donde se usa la funcion para buscar y posteriormente insertar el proceso en un segmento
+        m.buscarSegmentoVacio(nuevoProceso);
     }else{
         System.out.println("Error: No se puede crear proceso porque no hay espacio en memoria\n");
     }
-
   }
 
   public boolean revisarEspacioMemoria(){
