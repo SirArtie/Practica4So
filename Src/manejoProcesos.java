@@ -6,111 +6,15 @@
  */
 
 import java.util.ArrayList;
-public class manejoProcesos {
-  int id = 0;
-  ArrayList<Proceso> Preparados = new ArrayList();
-
-  /*Nota de Axel: Esta parte, la cambie porque creo que era conveniente
-  usar la misma funcion de la gestion de procesos para poder llevar una cuenta de
-  un id para cada proceso, y el parametro de gestion de memoria, porque es
-  mucho mas sencillo pasar el objeto de gestion de memoria para añadir
-  a los elementos a la lista de memoria*/
-  public void crearProceso(String nombreP, gestionMemoria m){
-    id ++;
-    int instrucciones, localidades = 0, seleccionar = 0;
-    boolean hayEspacio;
-    boolean espacioSuficiente;
-    instrucciones = (int)Math.floor(Math.random()*(30-10+1)+10);
-    seleccionar = (int)Math.floor(Math.random()*4+1);
-    //Con el número que se genere se asignará el número de localidades
-    switch(seleccionar){
-        case 1:
-            localidades = 64;
-            break;
-        case 2:
-            localidades = 128;
-            break;
-        case 3:
-            localidades = 256;
-            break;
-        case 4:
-            localidades = 512;
-            break;
-    }
-    if(m.buscarEspacio() == true){
-        Proceso nuevoProceso = new Proceso(nombreP, instrucciones, localidades, id);
-
-        System.out.println("\n----------------------------------------------------------------\n");
-        System.out.println("*** Creando Proceso ***\n");//Nota Axel: Cambie esto a creando proceso para que tenga mas coherencia
-        System.out.println("Nombre del proceso: " + nombreP);
-        System.out.println("Número de instrucciones: " + instrucciones);
-        System.out.println("Número de localidades: " + localidades);
-        System.out.println("Id de proceso: " + id);
-        System.out.println("\n----------------------------------------------------------------\n");
-        /*Se termina de verificar que el espacio en memoria sea suficiente para poder crearlo*/
-        if (m.buscarSegmentoVacio(nuevoProceso))
-          this.mandarAColaPreparados(nuevoProceso);
-
-    }else{
-        System.out.println("Error: No se puede crear proceso porque no hay espacio en memoria\n");
-    }
-  }
-
-  public boolean revisarEspacioMemoria(){
-
-    boolean verificar = true;//Debe estar en false
-    //Falta desarrollar
-    return verificar;
-    }
-
-  void mandarAColaPreparados(Proceso proceso){
-    System.out.println("El proceso está preparado para ser ejecutado\n");
-    Preparados.add(proceso);
-  }
-
-  void imprimirInformacionPreparados(){
-    int faltan;
-    System.out.println("Los proceso que están preparados para ejecutarse son: \n");
-    for (int i = 0; i < Preparados.size(); i++) {
-        Proceso proc;
-        proc = Preparados.get(i);
-        System.out.println("PID = "+ proc.idP);
-        System.out.println("Nombre Proceso: "+ proc.nombre);
-        faltan = proc.instruccionesTotales - proc.instruccionesEjecutadas;
-        System.out.println("Número de instrucciones que faltan por ejecutar: "+faltan+"\n");
-    }
-  }
-
-  void imprimirProcesoActual(){
-    System.out.println("Proceso Actual");
-    Proceso proc;
-    proc = Preparados.get(0);
-    System.out.println("PID = "+ proc.idP);
-    System.out.println("Nombre Proceso: "+ proc.nombre);
-    System.out.println("Número de instrucciones totales: "+proc.instruccionesTotales);
-    System.out.println("Número de instrucciones ejecutadas" + proc.instruccionesEjecutadas);
-    System.out.println("Direcciones de memoria asignada");
-  }
-
-  void PasarProcesoSiguiente(){
-    Proceso proc;
-    proc = Preparados.remove(0);
-    Preparados.add(proc);
-  }
-}
 
 
 
---------------------------------------------------------------------------------------------------------------------------------
-  
-  
-  
   public class ManejoProcesos {
     ArrayList<Proceso> Preparados = new ArrayList();
     ArrayList<String> Finalizados = new ArrayList();
     ArrayList<Proceso> Eliminados = new ArrayList();
     int id = 0;
-    
+
     /*Nota de Axel: Esta parte, la cambie porque creo que era conveniente
     usar la misma funcion de la gestion de procesos para poder llevar una cuenta de
     un id para cada proceso, y el parametro de gestion de memoria, porque es
@@ -119,10 +23,10 @@ public class manejoProcesos {
     public void crearProceso(String nombreP, gestionMemoria m){
         id ++;
         int instrucciones, localidades = 0, seleccionar = 0;
-        
+
         instrucciones = (int)Math.floor(Math.random()*(30-10+1)+10);
         seleccionar = (int)Math.floor(Math.random()*4+1);
-        
+
         //Con el número que se genere se asignará el número de localidades
         switch(seleccionar){
             case 1:
@@ -134,12 +38,12 @@ public class manejoProcesos {
             case 3:
                 localidades = 256;
                 break;
-            case 4: 
+            case 4:
                 localidades = 512;
                 break;
         }
-        
-        if(m.buscarEspacio() == true){
+
+        if(m.buscarEspacio(localidades) == true){
             Proceso nuevoProceso = new Proceso(nombreP, instrucciones, localidades, id);
 
             System.out.println("\n*** Creando Proceso ***\n");//Nota Axel: Cambie esto a creando proceso para que tenga mas coherencia
@@ -148,26 +52,28 @@ public class manejoProcesos {
             System.out.println("Número de localidades: " + localidades);
             System.out.println("Id de proceso: " + id);
             /*Se termina de verificar que el espacio en memoria sea suficiente para poder crearlo*/
-            if (m.buscarSegmentoVacio(nuevoProceso)){
-                this.mandarAColaPreparados(nuevoProceso);
-            }
+            m.insertarProceso(nuevoProceso);
+            this.mandarAColaPreparados(nuevoProceso);
+            //Esto lo uso para probar el nuevo metodo de ver la tabla de procesos
+            //this.imprimirTablaPaginasProceso(nuevoProceso);
+
         }else{
         System.out.println("\nError: No se puede crear el proceso porque no hay espacio en memoria");
-        } 
+        }
     }
-    
+
     void mandarAColaPreparados(Proceso proceso){
         System.out.println("\nEl proceso está preparado para ser ejecutado\n");
         Preparados.add(proceso);
     }
-    
+
     void imprimirInformacionPreparados(){
         int faltan;
         for (int i = 0; i < Preparados.size(); i++) {
-            
+
             if(i == 0){
                 System.out.println("**Proceso activo: ");
-            } 
+            }
             else if(i == 1){
                 System.out.println("\n**Los proceso que están preparados para ejecutarse son: ");
             }
@@ -179,7 +85,7 @@ public class manejoProcesos {
             System.out.println("Número de instrucciones que faltan por ejecutar: "+faltan);
         }
     }
-    
+
     void imprimirProcesoActual(gestionMemoria memoria){
         if(!Preparados.isEmpty()){
             int num;
@@ -190,21 +96,21 @@ public class manejoProcesos {
             System.out.println("Número de instrucciones totales: "+proc.instruccionesTotales);
             System.out.println("Número de instrucciones ejecutadas:" + proc.instruccionesEjecutadas);
             System.out.println("Direcciones de memoria asignada: ");
-            
+
             for (int i = 0; i < memoria.memoriaPrincipal.size(); i++) {
                 if(memoria.memoriaPrincipal.get(i).P.idP == proc.idP){
                     System.out.println("    Base: "+memoria.memoriaPrincipal.get(i).base);
                     System.out.println("    Límite: "+memoria.memoriaPrincipal.get(i).limite);
                 }
             }
-            
+
             //System.out.println("\nProceso al final de la ejecución: ");
             //this.imprimirProceso(proc);
         }else{
             System.out.println("\nERROR: No hay procesos preparados para su ejecución\n");
         }
     }
-    
+
     void imprimirProcesoActualSencillo(){
         if(!Preparados.isEmpty()){
             int num;
@@ -218,7 +124,7 @@ public class manejoProcesos {
             System.out.println("\nERROR: No hay procesos preparados para su ejecución\n");
         }
     }
-    
+
     void PasarProcesoSiguiente(){
         if(!Preparados.isEmpty()){
             Proceso proc;
@@ -232,7 +138,7 @@ public class manejoProcesos {
             System.out.println("\nERROR: No hay procesos preparados para su ejecución\n");
         }
     }
-    
+
     void ejecutarProceso(gestionMemoria memoria){
         if(!Preparados.isEmpty()){
             System.out.println("\nEjecución...\n");
@@ -249,7 +155,7 @@ public class manejoProcesos {
                         String informacion;
                         informacion = "PID: "+proceso.idP+"   Nombre proceso: "+proceso.nombre;
                         Finalizados.add(informacion);
-                        
+
                         memoria.procesoAEliminar(proceso.idP,this,2);//codigo 1 = eliminar, 2 = finalizo
 
                     }else{
@@ -262,7 +168,7 @@ public class manejoProcesos {
             System.out.println("ERROR: No hay procesos preparados para su ejecución\n");
         }
     }
-    
+
     void imprimirFinalizados(){
         if(!Finalizados.isEmpty()){
             for (int i = 0; i < Finalizados.size(); i++) {
@@ -271,15 +177,15 @@ public class manejoProcesos {
         }else{
             System.out.println("No ha finalizado ningún proceso");
         }
-    }   
-    
+    }
+
     int numeroProcesosPreparados(){
         int num;
         num = Preparados.size();
         return num;
     }
-    
-    
+
+
     void imprimirInformacionEliminados(){
         if (!Eliminados.isEmpty()) {
             int faltan;
@@ -292,6 +198,11 @@ public class manejoProcesos {
             }
         }else{
             System.out.println("No se eliminaron procesos");
-        } 
+        }
+    }
+
+    void imprimirTablaPaginasProceso(Proceso p){
+      for (int i = 0; i<p.localidadesTP.length; i++)
+        System.out.println("Pagina numero: " + i + "\tMarco de memoria numero: "+ p.localidadesTP[i]);
     }
 }

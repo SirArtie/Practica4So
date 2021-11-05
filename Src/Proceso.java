@@ -19,11 +19,19 @@ public class Proceso{
   int r_localidad = 0;
   int idP = 0;
 
+  //Tabla de paginas
+  int num_paginas = 0;
+  int[] localidadesTP;
   //Constructor para inicializar los procesos segun los valores dados
   public Proceso(String nombre, int numInstrucciones, int numLocalidades, int idProceso){
     this.nombre = nombre;
     this.instruccionesTotales = numInstrucciones;
     this.r_localidad = numLocalidades;
     this.idP = idProceso;
+  }
+
+  void inicializarTP(){
+    num_paginas = r_localidad / 16;
+    localidadesTP = new int[num_paginas];
   }
 }
