@@ -43,7 +43,7 @@ import java.util.ArrayList;
                 break;
         }
 
-        f(m.buscarEspacioProcesoTotal(localidades) == true){
+        if(m.buscarEspacioProcesoTotal(localidades) == true){
             Proceso nuevoProceso = new Proceso(nombreP, instrucciones, localidades, id);
 
             System.out.println("\n*** Creando Proceso ***\n");//Nota Axel: Cambie esto a creando proceso para que tenga mas coherencia
@@ -59,8 +59,8 @@ import java.util.ArrayList;
 
         }else{
         System.out.println("\nError: No se puede crear el proceso porque no hay espacio suficiente en memoria");
-         //Se le resta uno a id porque al no ser creado el proceso ya no es necesario que se agregue a 
-        //la cuenta un proceso más 
+         //Se le resta uno a id porque al no ser creado el proceso ya no es necesario que se agregue a
+        //la cuenta un proceso más
         id = id -1;
         }
     }
@@ -201,5 +201,51 @@ import java.util.ArrayList;
     void imprimirTablaPaginasProceso(Proceso p){
       for (int i = 0; i<p.localidadesTP.length; i++)
         System.out.println("Pagina numero: " + i + "\tMarco de memoria numero: "+ p.localidadesTP[i]);
+    }
+
+    //Funcion crear proceso para pruebas
+    public void crearProcesoPrueba(String nombreP, gestionMemoria m){
+        id ++;
+        int instrucciones, localidades = 0, seleccionar = 0;
+
+        instrucciones = (int)Math.floor(Math.random()*(30-10+1)+10);
+        seleccionar = Utilidades.giveAInt();
+
+        //Con el número que se genere se asignará el número de localidades
+        switch(seleccionar){
+            case 1:
+                localidades = 64;
+                break;
+            case 2:
+                localidades = 128;
+                break;
+            case 3:
+                localidades = 256;
+                break;
+            case 4:
+                localidades = 512;
+                break;
+        }
+
+        if(m.buscarEspacioProcesoTotal(localidades) == true){
+            Proceso nuevoProceso = new Proceso(nombreP, instrucciones, localidades, id);
+
+            System.out.println("\n*** Creando Proceso ***\n");//Nota Axel: Cambie esto a creando proceso para que tenga mas coherencia
+            System.out.println("Nombre del proceso: " + nombreP);
+            System.out.println("Número de instrucciones: " + instrucciones);
+            System.out.println("Número de localidades: " + localidades);
+            System.out.println("Id de proceso: " + id);
+            /*Se termina de verificar que el espacio en memoria sea suficiente para poder crearlo*/
+            m.insertarProceso(nuevoProceso);
+            this.mandarAColaPreparados(nuevoProceso);
+            //Esto lo uso para probar el nuevo metodo de ver la tabla de procesos
+            //this.imprimirTablaPaginasProceso(nuevoProceso);
+
+        }else{
+        System.out.println("\nError: No se puede crear el proceso porque no hay espacio suficiente en memoria");
+         //Se le resta uno a id porque al no ser creado el proceso ya no es necesario que se agregue a
+        //la cuenta un proceso más
+        id = id -1;
+        }
     }
 }

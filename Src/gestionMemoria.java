@@ -33,7 +33,7 @@ import java.util.List;
         Proceso vacio = new Proceso("Vacio",0,0,0);
         auxiliar.P = vacio;
         auxiliar.base = 16*i;
-        auxiliar.limite = 16*(i+1);
+        auxiliar.limite = 16;
         memoriaPrincipal.add(auxiliar);
         }
     }
@@ -57,8 +57,8 @@ import java.util.List;
         if(contador == npaginas)
           break;
       }
-    }    
-    
+    }
+
     /*Esta funcion recorre la lista de memoria e imprime los nombres
     del proceso de cada segmento asi como su valor de base y limite*/
     void imprimirListaMemoria(){
@@ -70,113 +70,34 @@ import java.util.List;
         }
     }
 
-    /*Esta funcion solo se asegura de que haya espacio en memoria, no le interesa cuanto, esto
-    es solo para verificar si se podria crear un proceso o no, sin embargo tambien se toma en cuenta
-    el caso para cuando el espacio disponible es menor a 64 localidades, en ese caso directamente
-    dice que no hay memoria*/
-    boolean buscarEspacio(int tamanio){
-      int espacio = 0;
-      for( int i = 0; i<memoriaPrincipal.size(); i++){
-          espacio = espacio + memoriaPrincipal.get(i).limite - memoriaPrincipal.get(i).base;
-          if(memoriaPrincipal.get(i).P.nombre == "Vacio" && espacio>=tamanio )
-            return true;
-      }
-      return false;
-    }
-    
     void estadoProcesos(ManejoProcesos controlador){
         System.out.println("Número de procesos preparados para ejecutarse: "+controlador.Preparados.size()+"\n");
         System.out.println("Proceso finalizados exitosamente: ");
         controlador.imprimirFinalizados();
         System.out.println("\nProcesos eliminados antes de terminar su ejecución");
         controlador.imprimirInformacionEliminados();
-        //System.out.println("\nEstado de la memoria:");//Ya no se usa 
+        //System.out.println("\nEstado de la memoria:");//Ya no se usa
         //this.imprimirListaMemoria();
     }
-    
-    /*Esta función ayuda a verificar si hay espacio suficiente para todo el proceso, ya que antes de 
+
+    /*Esta función ayuda a verificar si hay espacio suficiente para todo el proceso, ya que antes de
     empezar a asignar en memoria las páginas se debe de confirmar que hay espacio para todo*/
     boolean buscarEspacioProcesoTotal(int tamanio){
         boolean hayEspacio = false;
         int contadorLocalidades = 0;
         for (int i = 0; i < memoriaPrincipal.size(); i++) {
             if (memoriaPrincipal.get(i).P.nombre == "Vacio") {
+              contadorLocalidades = contadorLocalidades + 16;
                 if(contadorLocalidades >= tamanio){
                     hayEspacio = true;
-                    break;
-                }else{
-                    contadorLocalidades = contadorLocalidades + 16;
+                    return hayEspacio;
                 }
             }
         }
         return hayEspacio;
     }
 
-    /*boolean quitarProcesoDeMemoria(Proceso p, ManejoProcesos controlador){
-        boolean liberada = false;
-        int baseProcesoAEliminar, limiteProcesoAEliminar;
 
-        for( int i = 0; i<memoriaPrincipal.size(); i++){
-            int anterior, siguiente;
-            //Si se localiza el segmento de memoria del proceso a eliminar
-            if(memoriaPrincipal.get(i).P.idP == p.idP){
-
-                limiteProcesoAEliminar = memoriaPrincipal.get(i).limite;
-                baseProcesoAEliminar = memoriaPrincipal.get(i).base;
-                anterior = i-1;
-                siguiente = i+1;
-                //Se revisa si es el primer elemento de la lista, pues este no puede tener anterior
-                if(i == 0){
-                    if(siguiente < memoriaPrincipal.size()){
-                        //Tienen elementos siguientes
-                        if (memoriaPrincipal.get(siguiente).P.nombre == "Vacio") {
-                            //Su elemento siguiente es vacío
-                            //Se juntará lo del segmento vacío y lo del segmento del proceso que se eliminará
-                            //La base se modifica y el límite se queda igual
-                            memoriaPrincipal.get(siguiente).base = baseProcesoAEliminar;
-                            memoriaPrincipal.remove(i);
-                            liberada = true;
-                            break;
-                        }else{ //no tiene vacio a los lados se cambia a vacio el nombre
-                        //Si no hay ningún espacio vacío junto a este segmento, se cambia el nombre del proceso a vacío
-                        memoriaPrincipal.get(i).P.nombre = "Vacio";
-                        liberada = true;
-                                break;
-                        }
-                    }
-                }else{
-                   //Si no es el primer elemento de la lista
-                    if (memoriaPrincipal.get(anterior).P.nombre == "Vacio") {
-                        //Se juntará lo del segmento vacío y lo del segmento del proceso que se eliminará
-                        //La base se queda igual y el límite se modifica
-                        memoriaPrincipal.get(anterior).limite = limiteProcesoAEliminar;
-                        memoriaPrincipal.remove(i);
-                        liberada = true;
-                        break;
-                     //Si no fue la localidad anterior
-                     //Si hay un segmentos después en la memoria
-                    }else if(siguiente < memoriaPrincipal.size()){
-                        if (memoriaPrincipal.get(siguiente).P.nombre == "Vacio") {
-                            //Se juntará lo del segmento vacío y lo del segmento del proceso que se eliminará
-                            //La base se modifica y el límite se queda igual
-                            memoriaPrincipal.get(siguiente).base = baseProcesoAEliminar;
-                            memoriaPrincipal.remove(i);
-                            liberada = true;
-                            break;
-                        }
-                        else{//mismo problemaa
-                            //Si no hay ningún espacio vacío junto a este segmento, se cambia el nombre del proceso a vacío
-                            memoriaPrincipal.get(i).P.nombre = "Vacio";
-                            liberada = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return liberada;
-    }*/
-    
     boolean quitarProcesoDeMemoria(Proceso p, ManejoProcesos controlador){
         boolean liberada = false;
         int contadorMarcos = 0;
@@ -226,9 +147,9 @@ import java.util.List;
         }
         return eliminado;
     }
-}
 
-//Lista ligada de la memoria 
+
+//Lista ligada de la memoria
 void estadoMemoria(){
         int indice = 0;
         ArrayList<Integer> baseProcesos = new ArrayList();
@@ -257,7 +178,7 @@ void estadoMemoria(){
                             }
                         }else{
                             indice = baseProcesos.size()-1;
-                            System.out.println("    Límite: 1024");
+                            System.out.println("    Límite: " + (memoriaPrincipal.get(i).base-baseProcesos.get(indice)+16) );
                         }
                     }
                 }else{
@@ -273,10 +194,15 @@ void estadoMemoria(){
                             }
                         }else{
                             indice = baseProcesos.size()-1;
-                            System.out.println("    Límite: 1024");
+                            System.out.println("    Límite: " + (memoriaPrincipal.get(i).base-baseProcesos.get(indice)+16)  );
                         }
                     }
                 }
             }
-        }   
+        }
     }
+
+    void desfragmentarMemoria(){
+      System.out.println("No esta implementado favor de volver luego");
+    }
+  }

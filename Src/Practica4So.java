@@ -15,7 +15,7 @@
      * @param args the command line arguments
      */
   public class Practica4So{
-   
+
     /**
      * @param args the command line arguments
      */
@@ -24,16 +24,16 @@
         System.out.println("\n****************************************************************");
         System.out.println("********************** GESTIÓN DE MEMORIA **********************");
         System.out.println("****************************************************************\n");
-        
+
         String m = "MENÚ DE OPCIONES:\n1.-Crear Proceso Nuevo\n2.-Ver estado actual de los procesos\n3.-Imprimir Cola de Procesos\n4.-Ver proceso actual\n5.-Ejecutar proceso actual\n6.-Pasar al proceso siguiente\n7.-Matar proceso actual\n8.- Ver estado de la memoria\n9.-Desfragmentar memoria\n10.-Salir del programa\n";
         int opcion;
-        
+
         //Se inicializa el administrador del manejo de procesos
         ManejoProcesos controlador = new ManejoProcesos();
-        
+
         //Se inicializa el administrador de la memoria
         gestionMemoria memoria = new gestionMemoria();
-        
+
         memoria.memoriaVacia();
         do{
             //Funcion que permite pedir un meno continuamente
@@ -76,7 +76,7 @@
                 case 6:
                     System.out.println("\n----------------------------------------------------------------\n");
                     System.out.println("******************** Pasar al proceso siguiente ********************\n");
-                    controlador.PasarProcesoSiguiente();                    
+                    controlador.PasarProcesoSiguiente();
                     System.out.println("\n----------------------------------------------------------------\n");
                     break;
                 case 7:
@@ -109,7 +109,7 @@
                     System.out.println("Estado de la memoria:");
                     memoria.estadoMemoria();
                     System.out.println("\n----------------------------------------------------------------\n");
-                    break; 
+                    break;
                 case 10:
                     System.out.println("\n----------------------------------------------------------------\n");
                     System.out.println("El estado final del sistema es: \n");
@@ -125,5 +125,5 @@
             }
         }while(opcion!=10);
     }
-    
+
 }
