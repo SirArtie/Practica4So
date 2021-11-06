@@ -203,6 +203,47 @@ void estadoMemoria(){
     }
 
     void desfragmentarMemoria(){
-      System.out.println("No esta implementado favor de volver luego");
-    }
+      System.out.println("Aun no esta listo, por favor regrese el lunes");
+      int objetivo = -1;
+      int reemplazo = -1;
+      String auxiliarNombre;
+      for (int i = 0; i < memoriaPrincipal.size(); i++){
+        if (memoriaPrincipal.get(i).P.nombre == "Vacio"){
+          objetivo = i ;
+          for(int n = i+1; n < memoriaPrincipal.size(); n++){
+            if (memoriaPrincipal.get(n).P.nombre != "Vacio"){
+              reemplazo = n+1;
+              //memoriaPrincipal.get(objetivo).P = memoriaPrincipal.get(reemplazo).P;
+              memoriaPrincipal.get(objetivo).P.nombre = memoriaPrincipal.get(reemplazo).P.nombre;
+              memoriaPrincipal.get(objetivo).P.instruccionesTotales = memoriaPrincipal.get(reemplazo).P.instruccionesTotales;
+              memoriaPrincipal.get(objetivo).P.instruccionesEjecutadas = memoriaPrincipal.get(reemplazo).P.instruccionesEjecutadas;
+              memoriaPrincipal.get(objetivo).P.r_localidad = memoriaPrincipal.get(reemplazo).P.r_localidad;
+              memoriaPrincipal.get(objetivo).P.idP = memoriaPrincipal.get(reemplazo).P.idP;
+              memoriaPrincipal.get(objetivo).P.num_paginas = memoriaPrincipal.get(reemplazo).P.num_paginas;
+              memoriaPrincipal.get(objetivo).P.localidadesTP = memoriaPrincipal.get(reemplazo).P.localidadesTP;
+              //if (auxiliarNombre == null){
+                //auxiliarNombre = memoriaPrincipal.get(reemplazo).P.nombre;
+
+              //}
+              ////////////////////////////////////////////////////
+              memoriaPrincipal.get(reemplazo).P.nombre = "Vacio";
+              memoriaPrincipal.get(reemplazo).P.instruccionesTotales = 0;
+              memoriaPrincipal.get(reemplazo).P.instruccionesEjecutadas = 0;
+              memoriaPrincipal.get(reemplazo).P.r_localidad = 0;
+              memoriaPrincipal.get(reemplazo).P.idP = 0;
+              memoriaPrincipal.get(reemplazo).P.num_paginas = 0;
+              memoriaPrincipal.get(reemplazo).P.localidadesTP = null;
+              break;
+            }
+          }
+        }
+
+
+
+        }
+
+
+
+      }
+
   }
