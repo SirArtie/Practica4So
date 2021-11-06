@@ -57,8 +57,8 @@ import java.util.List;
         if(contador == npaginas)
           break;
       }
-    }
-
+    }    
+    
     /*Esta funcion recorre la lista de memoria e imprime los nombres
     del proceso de cada segmento asi como su valor de base y limite*/
     void imprimirListaMemoria(){
@@ -83,18 +83,36 @@ import java.util.List;
       }
       return false;
     }
-
-    void estadoSistema(ManejoProcesos controlador){
+    
+    void estadoProcesos(ManejoProcesos controlador){
         System.out.println("Número de procesos preparados para ejecutarse: "+controlador.Preparados.size()+"\n");
         System.out.println("Proceso finalizados exitosamente: ");
         controlador.imprimirFinalizados();
         System.out.println("\nProcesos eliminados antes de terminar su ejecución");
         controlador.imprimirInformacionEliminados();
-        System.out.println("\nEstado de la memoria:");
-        this.imprimirListaMemoria();
+        //System.out.println("\nEstado de la memoria:");//Ya no se usa 
+        //this.imprimirListaMemoria();
+    }
+    
+    /*Esta función ayuda a verificar si hay espacio suficiente para todo el proceso, ya que antes de 
+    empezar a asignar en memoria las páginas se debe de confirmar que hay espacio para todo*/
+    boolean buscarEspacioProcesoTotal(int tamanio){
+        boolean hayEspacio = false;
+        int contadorLocalidades = 0;
+        for (int i = 0; i < memoriaPrincipal.size(); i++) {
+            if (memoriaPrincipal.get(i).P.nombre == "Vacio") {
+                if(contadorLocalidades >= tamanio){
+                    hayEspacio = true;
+                    break;
+                }else{
+                    contadorLocalidades = contadorLocalidades + 16;
+                }
+            }
+        }
+        return hayEspacio;
     }
 
-    boolean quitarProcesoDeMemoria(Proceso p, ManejoProcesos controlador){
+    /*boolean quitarProcesoDeMemoria(Proceso p, ManejoProcesos controlador){
         boolean liberada = false;
         int baseProcesoAEliminar, limiteProcesoAEliminar;
 
@@ -157,6 +175,23 @@ import java.util.List;
             }
         }
         return liberada;
+    }*/
+    
+    boolean quitarProcesoDeMemoria(Proceso p, ManejoProcesos controlador){
+        boolean liberada = false;
+        int contadorMarcos = 0;
+
+        for( int i = 0; i<memoriaPrincipal.size(); i++){
+            if(memoriaPrincipal.get(i).P.idP == p.idP){
+                memoriaPrincipal.get(i).P.nombre = "Vacio";
+                contadorMarcos = contadorMarcos + 1;
+                if (contadorMarcos == p.num_paginas) {
+                    liberada = true;
+                    break;
+                }
+            }
+        }
+        return liberada;
     }
 
     boolean procesoAEliminar(int id, ManejoProcesos controlador, int codigo){
@@ -192,3 +227,56 @@ import java.util.List;
         return eliminado;
     }
 }
+
+//Lista ligada de la memoria 
+void estadoMemoria(){
+        int indice = 0;
+        ArrayList<Integer> baseProcesos = new ArrayList();
+        for (int i = 0; i<memoriaPrincipal.size(); i++) {
+            if (i == 0) {
+                if (memoriaPrincipal.get(i).P.nombre == "Vacio") {
+                    System.out.println("Vacio");
+                    System.out.println("    Base: "+memoriaPrincipal.get(i).base);
+                    baseProcesos.add(memoriaPrincipal.get(i).base);
+                }else{
+                    System.out.println("Id Proceso: "+memoriaPrincipal.get(i).P.idP);
+                    System.out.println("    Base: "+memoriaPrincipal.get(i).base);
+                    baseProcesos.add(memoriaPrincipal.get(i).base);
+                }
+            }else{
+                if (memoriaPrincipal.get(i).P.nombre == "Vacio") {
+                    if (memoriaPrincipal.get(i-1).P.nombre != "Vacio") {
+                        System.out.println("Vacio");
+                        System.out.println("    Base: "+memoriaPrincipal.get(i).base);
+                        baseProcesos.add(memoriaPrincipal.get(i).base);
+                    }else{
+                        if (i != memoriaPrincipal.size()-1) {
+                            if (memoriaPrincipal.get(i+1).P.nombre != "Vacio") {
+                                indice = baseProcesos.size()-1;
+                                System.out.println("    Límite: "+(memoriaPrincipal.get(i+1).base-baseProcesos.get(indice)));
+                            }
+                        }else{
+                            indice = baseProcesos.size()-1;
+                            System.out.println("    Límite: 1024");
+                        }
+                    }
+                }else{
+                    if (memoriaPrincipal.get(i).P.idP != memoriaPrincipal.get(i-1).P.idP) {
+                        System.out.println("Id Proceso: "+memoriaPrincipal.get(i).P.idP);
+                        System.out.println("    Base: "+memoriaPrincipal.get(i).base);
+                        baseProcesos.add(memoriaPrincipal.get(i).base);
+                    }else{
+                        if (i != memoriaPrincipal.size()-1) {
+                            if (memoriaPrincipal.get(i).P.idP != memoriaPrincipal.get(i+1).P.idP) {
+                                indice = baseProcesos.size()-1;
+                                System.out.println("    Límite: "+(memoriaPrincipal.get(i+1).base-baseProcesos.get(indice)));
+                            }
+                        }else{
+                            indice = baseProcesos.size()-1;
+                            System.out.println("    Límite: 1024");
+                        }
+                    }
+                }
+            }
+        }   
+    }
