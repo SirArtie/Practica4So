@@ -43,7 +43,7 @@ import java.util.ArrayList;
                 break;
         }
 
-        if(m.buscarEspacio(localidades) == true){
+        f(m.buscarEspacioProcesoTotal(localidades) == true){
             Proceso nuevoProceso = new Proceso(nombreP, instrucciones, localidades, id);
 
             System.out.println("\n*** Creando Proceso ***\n");//Nota Axel: Cambie esto a creando proceso para que tenga mas coherencia
@@ -58,7 +58,10 @@ import java.util.ArrayList;
             //this.imprimirTablaPaginasProceso(nuevoProceso);
 
         }else{
-        System.out.println("\nError: No se puede crear el proceso porque no hay espacio en memoria");
+        System.out.println("\nError: No se puede crear el proceso porque no hay espacio suficiente en memoria");
+         //Se le resta uno a id porque al no ser creado el proceso ya no es necesario que se agregue a 
+        //la cuenta un proceso más 
+        id = id -1;
         }
     }
 
@@ -95,17 +98,11 @@ import java.util.ArrayList;
             System.out.println("Nombre Proceso: "+ proc.nombre);
             System.out.println("Número de instrucciones totales: "+proc.instruccionesTotales);
             System.out.println("Número de instrucciones ejecutadas:" + proc.instruccionesEjecutadas);
-            System.out.println("Direcciones de memoria asignada: ");
-
-            for (int i = 0; i < memoria.memoriaPrincipal.size(); i++) {
-                if(memoria.memoriaPrincipal.get(i).P.idP == proc.idP){
-                    System.out.println("    Base: "+memoria.memoriaPrincipal.get(i).base);
-                    System.out.println("    Límite: "+memoria.memoriaPrincipal.get(i).limite);
-                }
-            }
-
-            //System.out.println("\nProceso al final de la ejecución: ");
-            //this.imprimirProceso(proc);
+            System.out.println("\nTabla de páginas del proceso: ");
+            this.imprimirTablaPaginasProceso(proc);
+            /*for (int i = 0; i < proc.localidadesTP.length; i++) {
+                System.out.println("Número de página: "+i+"   |   Número de segmento de memoria: "+proc.localidadesTP[i]);
+            }*/
         }else{
             System.out.println("\nERROR: No hay procesos preparados para su ejecución\n");
         }
